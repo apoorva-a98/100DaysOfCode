@@ -65,7 +65,7 @@ public:
     }
     
     float heading(){
-       return atan2(y,x);
+        return atan2(y,x);
     }
     
     void translate(PVector v){
@@ -112,33 +112,51 @@ public:
     }
     
     void applyForce(PVector force) {
-            acceleration.add(force);
-        }
+        acceleration.add(force);
+    }
+    
+    /*void seek(PVector target) {
+     target.sub(location);
+     desired= PVector(target.x,target.y);
+     desired.normalize();
+     desired.mul(maxspeed);
+     desired.sub(velocity);
+     
+     steer= PVector(desired.x,desired.y);
+     steer.limit(maxforce);
+     applyForce(steer);
+     }*/
+    
+    void arrive(PVector target){
         
-    void seek(PVector target) {
         target.sub(location);
         desired= PVector(target.x,target.y);
+        float d = desired.mag();
         desired.normalize();
-        desired.mul(maxspeed);
+        if (d < 100) {
+            float m = ofMap(d,0,100,0,maxspeed);
+            desired.mul(m);
+        } else {
+            desired.mul(maxspeed);
+        }
         desired.sub(velocity);
-        
         steer= PVector(desired.x,desired.y);
         steer.limit(maxforce);
         applyForce(steer);
-        }
-        
+    }
+    
     void display() {
-            float theta = velocity.heading() + PI/2;
+        float theta = velocity.heading() + PI/2;
         cout<<theta<<endl;
-            //fill(175);
-            //stroke(0);
-            ofPushMatrix();
-            ofTranslate(location.x,location.y);
-            ofRotateRad(theta);
-            ofDrawTriangle(0,-r*2,-r, r*2,r, r*2);
-            ofPopMatrix();
-        }
-
+        //fill(175);
+        //stroke(0);
+        ofPushMatrix();
+        ofTranslate(location.x,location.y);
+        ofRotateRad(theta);
+        ofDrawTriangle(0,-r*2,-r, r*2,r, r*2);
+        ofPopMatrix();
+    }
+    
 };
 
 #endif /* VectorHead_h */
