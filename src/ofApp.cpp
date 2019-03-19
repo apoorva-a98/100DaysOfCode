@@ -13,7 +13,7 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
     agent.update();
-    agent.arrive(meal.food);
+    agent.arrive(meal);
 }
 
 //--------------------------------------------------------------
