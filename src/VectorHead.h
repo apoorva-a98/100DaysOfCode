@@ -75,6 +75,34 @@ public:
     
 };
 
+class Food {
+public:
+    PVector food;
+    
+    void display() {
+        ofSetColor(255, 0, 0);
+        ofDrawCircle(food.x, food.y, 5, 5);
+    }
+    
+    void reset() {
+        food.x = ofRandom(50, 350);
+        food.y = ofRandom(50, 350);
+    }
+    
+    int get_r() {
+        return food.x;
+    }
+    
+    int get_y() {
+        return food.y;
+    }
+    
+    Food() {
+        food.x = ofRandom(50, 350);
+        food.y = ofRandom(50, 350);
+    }
+};
+
 class VectorHead {
 public:
     PVector location;
@@ -82,6 +110,7 @@ public:
     PVector acceleration;
     PVector desired;
     PVector steer;
+    Food meal;
     float r;
     float maxforce;
     float maxspeed;
@@ -127,10 +156,9 @@ public:
         applyForce(steer);
         }*/
     
-    void arrive(PVector target){
-        
-        target.sub(location);
-        desired= PVector(target.x,target.y);
+    void arrive(Food &meal){
+        (meal.food).sub(location);
+        desired= PVector(meal.food.x,meal.food.y);
         float d = desired.mag();
         desired.normalize();
         if (d < 100) {
