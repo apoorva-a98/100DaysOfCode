@@ -81,7 +81,7 @@ public:
     
     void display() {
         ofSetColor(255, 0, 0);
-        //ofDrawCircle(food.x, food.y, 5, 5);
+        ofDrawCircle(food.x, food.y, 5, 5);
     }
     
     void reset() {
@@ -173,7 +173,7 @@ public:
         applyForce(steer);
     }
         
-    void display(Food &meal) {
+    void display() {
             float theta = velocity.heading() + PI/2;
        // cout<<theta<<endl;
             //fill(175);
@@ -184,7 +184,7 @@ public:
             ofDrawTriangle(0,-r*2,-r, r*2,r, r*2);
             ofPopMatrix();
 
-			ofDrawCircle(meal.food.x, meal.food.y, 5, 5);
+			
 	}
 
 };
