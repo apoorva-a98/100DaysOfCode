@@ -19,7 +19,7 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 
-    agent.display();
+    agent.display(meal);
     
 }
 
