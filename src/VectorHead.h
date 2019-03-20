@@ -82,6 +82,7 @@ public:
     void display() {
         ofSetColor(255, 0, 0);
         ofDrawCircle(food.x, food.y, 5, 5);
+		cout << food.x << food.y << endl;
     }
     
     void reset() {
