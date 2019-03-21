@@ -99,8 +99,8 @@ public:
     }
     
     Food() {
-        food.x = ofRandom(50, 350);
-        food.y = ofRandom(50, 350);
+        food.x = int(ofRandom(50, 350));
+        food.y = int(ofRandom(50, 350));
     }
 };
 
@@ -158,7 +158,7 @@ public:
         }*/
     
     void arrive(Food &meal){
-        (meal.food).sub(location);
+        //(meal.food).sub(location);
         desired= PVector(meal.food.x,meal.food.y);
         float d = desired.mag();
         desired.normalize();
@@ -173,6 +173,14 @@ public:
         steer.limit(maxforce);
         applyForce(steer);
     }
+	
+	void eat(Food &meal) {
+		int eatCount = 0;
+		if (meal.food.x == location.x && meal.food.y == location.y) {
+			eatCount = eatCount + 1;
+			meal.reset();
+		}
+	}
         
     void display() {
             float theta = velocity.heading() + PI/2;
