@@ -82,7 +82,6 @@ public:
     void display() {
         ofSetColor(255, 0, 0);
         ofDrawCircle(food.x, food.y, 5, 5);
-		cout << food.x << food.y << endl;
     }
     
     void reset() {
@@ -115,7 +114,8 @@ public:
     float r;
     float maxforce;
     float maxspeed;
-    
+	int eatCount;
+
     VectorHead(float x, float y) {
         acceleration = PVector(0,0);
         velocity = PVector(0,0);
@@ -123,6 +123,7 @@ public:
         r = 3.0;
         maxspeed = 2;
         maxforce = 0.1;
+		eatCount = 0;
     }
     
     VectorHead() {
@@ -132,6 +133,7 @@ public:
         r = 3.0;
         maxspeed = 4;
         maxforce = 0.1;
+		eatCount = 0;
     }
     
     void update() {
@@ -157,9 +159,11 @@ public:
         applyForce(steer);
         }*/
     
-    void arrive(Food &meal){
+    void arrive(Food &meal){ //arrive at food location
         //(meal.food).sub(location);
-        desired= PVector(meal.food.x,meal.food.y);
+		desired = PVector(meal.food.x, meal.food.y);
+		desired.sub(location);
+       
         float d = desired.mag();
         desired.normalize();
         if (d < 100) {
@@ -168,19 +172,39 @@ public:
         } else {
             desired.mul(maxspeed);
         }
+
         desired.sub(velocity);
         steer= PVector(desired.x,desired.y);
         steer.limit(maxforce);
         applyForce(steer);
-    }
-	
-	void eat(Food &meal) {
-		int eatCount = 0;
-		if (meal.food.x == location.x && meal.food.y == location.y) {
-			eatCount = eatCount + 1;
+
+		if (int(location.x) == meal.food.x && int(location.y) == meal.food.y) {
 			meal.reset();
 		}
-	}
+		/*cout << location.x << location.y << endl;
+		for (int i = -5; i < 6; i++) { //IT EATS FOR A SECOND HERE
+			if (int(location.x) + i== meal.food.x) {
+				
+				for (int j = -5; j < 6; j++) {
+					if (int(location.y) + j== meal.food.y) {
+						eatCount = eatCount + 1;
+						meal.reset();
+					}
+				}
+			}
+			else if (int(location.y) + i == meal.food.y) {
+				//cout << location.x << location.y << endl;
+				for (int j = -5; j < 6; j++) {
+					if (int(location.x) + j == meal.food.x) {
+						eatCount = eatCount + 1;
+						meal.reset();
+					}
+				}
+			}
+		}
+		//meal.reset();*/
+    }
+	
         
     void display() {
             float theta = velocity.heading() + PI/2;
