@@ -163,6 +163,11 @@ public:
         //(meal.food).sub(location);
 		desired = PVector(meal.food.x, meal.food.y);
 		desired.sub(location);
+        
+        if(desired.mag() <= 5){
+            meal.reset();
+            eatCount++;
+        }
        
         float d = desired.mag();
         desired.normalize();
@@ -177,32 +182,6 @@ public:
         steer= PVector(desired.x,desired.y);
         steer.limit(maxforce);
         applyForce(steer);
-
-		if (int(location.x) == meal.food.x && int(location.y) == meal.food.y) {
-			meal.reset();
-		}
-		/*cout << location.x << location.y << endl;
-		for (int i = -5; i < 6; i++) { //IT EATS FOR A SECOND HERE
-			if (int(location.x) + i== meal.food.x) {
-				
-				for (int j = -5; j < 6; j++) {
-					if (int(location.y) + j== meal.food.y) {
-						eatCount = eatCount + 1;
-						meal.reset();
-					}
-				}
-			}
-			else if (int(location.y) + i == meal.food.y) {
-				//cout << location.x << location.y << endl;
-				for (int j = -5; j < 6; j++) {
-					if (int(location.x) + j == meal.food.x) {
-						eatCount = eatCount + 1;
-						meal.reset();
-					}
-				}
-			}
-		}
-		//meal.reset();*/
     }
 	
         
@@ -216,6 +195,7 @@ public:
             ofRotateRad(theta);
             ofDrawTriangle(0,-r*2,-r, r*2,r, r*2);
             ofPopMatrix();
+        ofDrawBitmapString("Eat Count: " + to_string(eatCount), 10, 30);
 
 			
 	}
