@@ -14,6 +14,7 @@ void ofApp::setup(){
 void ofApp::update(){
     agent.update();
     agent.arrive(meal);
+	agent.energy = agent.energy - 5;
 }
 
 //--------------------------------------------------------------

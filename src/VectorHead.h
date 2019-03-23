@@ -8,27 +8,27 @@
 #ifndef VectorHead_h
 #define VectorHead_h
 
-class PVector {
+class Vector {
 public:
     float x;
     float y;
     
-    PVector(){
+    Vector(){
         //x = 200;
         //y = 200;
     }
     
-    PVector(float x, float y){
+    Vector(float x, float y){
         this->x = x;
         this->y = y;
     }
     
-    void add(PVector v){
+    void add(Vector v){
         x = x + v.x;
         y = y + v.y;
     }
     
-    void sub(PVector v){
+    void sub(Vector v){
         x = x - v.x;
         y = y - v.y;
     }
@@ -68,7 +68,7 @@ public:
        return atan2(y,x);
     }
     
-    void translate(PVector v){
+    void translate(Vector v){
         x=v.x-x;
         y=v.y-y;
     }
@@ -77,7 +77,7 @@ public:
 
 class Food {
 public:
-    PVector food;
+    Vector food;
     
     void display() {
         ofSetColor(255, 0, 0);
@@ -105,37 +105,49 @@ public:
 
 class VectorHead {
 public:
-    PVector location;
-    PVector velocity;
-    PVector acceleration;
-    PVector desired;
-    PVector steer;
+    Vector location;
+    Vector velocity;
+    Vector acceleration;
+    Vector desired;
+    Vector steer;
     Food meal;
     float r;
     float maxforce;
     float maxspeed;
 	int eatCount;
+	int energy;
+	int deathCount;
 
     VectorHead(float x, float y) {
-        acceleration = PVector(0,0);
-        velocity = PVector(0,0);
-        location = PVector(200,200);
+        acceleration = Vector(0,0);
+        velocity = Vector(0,0);
+        location = Vector(200,200);
         r = 3.0;
         maxspeed = 2;
         maxforce = 0.1;
 		eatCount = 0;
+		energy = 1000;
+		deathCount = 0;
     }
     
     VectorHead() {
-        acceleration = PVector(0,0);
-        velocity = PVector(0,0);
-        location = PVector(200,200);
+        acceleration = Vector(0,0);
+        velocity = Vector(0,0);
+        location = Vector(200,200);
         r = 3.0;
         maxspeed = 4;
         maxforce = 0.1;
 		eatCount = 0;
+		energy = 1000;
+		deathCount = 0;
     }
     
+	void reset() {
+		int x = ofRandom(50, 350);
+		int y = ofRandom(50, 350);
+		location = Vector(x, y);
+	}
+
     void update() {
         velocity.add(acceleration);
         velocity.limit(maxspeed);
@@ -143,28 +155,29 @@ public:
         acceleration.mul(0);
     }
     
-    void applyForce(PVector force) {
+    void applyForce(Vector force) {
             acceleration.add(force);
         }
         
-    /*void seek(PVector target) {
+    /*void seek(Vector target) {
         target.sub(location);
-        desired= PVector(target.x,target.y);
+        desired= Vector(target.x,target.y);
         desired.normalize();
         desired.mul(maxspeed);
         desired.sub(velocity);
         
-        steer= PVector(desired.x,desired.y);
+        steer= Vector(desired.x,desired.y);
         steer.limit(maxforce);
         applyForce(steer);
         }*/
     
     void arrive(Food &meal){ //arrive at food location
         //(meal.food).sub(location);
-		desired = PVector(meal.food.x, meal.food.y);
+		desired = Vector(meal.food.x, meal.food.y);
 		desired.sub(location);
         
         if(desired.mag() <= 5){
+			energy = energy + 50;
             meal.reset();
             eatCount++;
         }
@@ -179,25 +192,37 @@ public:
         }
 
         desired.sub(velocity);
-        steer= PVector(desired.x,desired.y);
+        steer= Vector(desired.x,desired.y);
         steer.limit(maxforce);
         applyForce(steer);
     }
 	
+	void checkEnergy() {
+		if (energy <= 0) {
+			reset();
+			energy = 1000;
+			deathCount = deathCount + 1;
+		}
+	}
         
     void display() {
             float theta = velocity.heading() + PI/2;
        // cout<<theta<<endl;
             //fill(175);
             //stroke(0);
+			ofSetColor(int((energy / 10)*255), int((energy/10)*255), 50);
+			checkEnergy();
             ofPushMatrix();
             ofTranslate(location.x,location.y);
             ofRotateRad(theta);
             ofDrawTriangle(0,-r*2,-r, r*2,r, r*2);
             ofPopMatrix();
-        ofDrawBitmapString("Eat Count: " + to_string(eatCount), 10, 30);
 
-			
+			ofSetColor(100, 100, 100);
+			ofDrawBitmapString("Eat Count: " + to_string(eatCount), 10, 30);
+			ofDrawBitmapString("Death Count: " + to_string(deathCount), 10, 50);			
+			ofDrawBitmapString("Energy: " , 10, 70);
+			ofDrawRectangle(70, 60, energy/10 , 10);
 	}
 
 };
