@@ -103,6 +103,73 @@ public:
     }
 };
 
+class Poison {
+public:
+	Vector poison;
+
+	void display() {
+		ofSetColor(0,0,0);
+		ofDrawCircle(poison.x, poison.y, 7, 7);
+	}
+
+	void reset() {
+		poison.x = ofRandom(50, 350);
+		poison.y = ofRandom(50, 350);
+	}
+
+	int get_r() {
+		return poison.x;
+	}
+
+	int get_y() {
+		return poison.y;
+	}
+
+	Poison() {
+		poison.x = int(ofRandom(50, 350));
+		poison.y = int(ofRandom(50, 350));
+	}
+};
+
+class Obstacle {
+public:
+	Vector obstacle;
+	int time;
+
+	void display() {
+		ofSetColor(100, 100, 100);
+		
+		time = ofGetElapsedTimeMillis();
+		//ofDrawBitmapString("Time:" + ofToString(time), 10, 100);
+		int interval = ofRandom(5000, 10000);
+
+		if (interval<time){
+			reset();
+		}
+
+		ofDrawRectangle(obstacle.x, obstacle.y, 30, 30);
+	}
+
+	void reset() {
+		obstacle.x = ofRandom(50, 350);
+		obstacle.y = ofRandom(50, 350);
+		ofResetElapsedTimeCounter();
+	}
+
+	int get_r() {
+		return obstacle.x;
+	}
+
+	int get_y() {
+		return obstacle.y;
+	}
+
+	Obstacle() {
+		obstacle.x = int(ofRandom(50, 350));
+		obstacle.y = int(ofRandom(50, 350));
+	}
+};
+
 class VectorHead {
 public:
     Vector location;
@@ -171,7 +238,7 @@ public:
         applyForce(steer);
         }*/
     
-    void arrive(Food &meal){ //arrive at food location
+    void arriveAtFood(Food &meal){ //arrive at food location
         //(meal.food).sub(location);
 		desired = Vector(meal.food.x, meal.food.y);
 		desired.sub(location);
@@ -226,5 +293,6 @@ public:
 	}
 
 };
+
 
 #endif /* VectorHead_h */

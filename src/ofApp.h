@@ -8,6 +8,8 @@ class ofApp : public ofBaseApp{
 	public:
         VectorHead agent;
         Food meal;
+		Poison pill;
+		Obstacle rock;
         //PVector Target;
 		void setup();
 		void update();

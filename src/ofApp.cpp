@@ -8,21 +8,24 @@ void ofApp::setup(){
     ofSetVerticalSync(true);
     agent = VectorHead();
     meal = Food();
+	pill = Poison();
+	rock = Obstacle();
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
     agent.update();
-    agent.arrive(meal);
+    agent.arriveAtFood(meal);
+	//agent.arriveAtPoison(pill);
 	agent.energy = agent.energy - 5;
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
 	meal.display();
-//	agent.eat(meal);
+	pill.display();
     agent.display();
-//	meal.display();
+	rock.display();
 }
 
 //--------------------------------------------------------------
